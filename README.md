@@ -7,12 +7,18 @@ Markdown files. An installation of the Tcllib package *snit* is required. To
 display Markdown files the Tcllib *Markdown* package has to be installed as
 well. The package *TkImg* is required to support the display of JPEG images.
 
-It is a fork of thtmlview which you find on [https://github.com/tcltk/tklib](https://github.com/tcltk/tklib)
 This widget is not a web browser. It will not work with http(s) addresses and
 only relative filenames for images and links should be used. The widget supports
 base64 encoded images embedded directly into HTML pages.
 
 * [Manual](http://htmlpreview.github.io/?https://github.com/mittelmark/thtmlview/blob/master/thtmlview/thtmlview.html)
+
+Background: _thtmlview_ It is a fork of my other widget _shtmlview_ which you find on [https://github.com/tcltk/tklib](https://github.com/tcltk/tklib).
+I would like to place the changes from _thtmlview_ to _shtmlview_, but as I do not use fossil the usual fork and merge approaches will not work. 
+So I decided to rename my widgets from _shtmlview_ to _thtmlview_ to make it distinguishable
+from the tcllib widget. Sorry for this fork, but I really need to use and extend the widget
+for my purposes in my own software which might be not the way tklib is supporting.
+
 
 ### Standalone Application
 
