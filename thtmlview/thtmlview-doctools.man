@@ -1,19 +1,19 @@
 [vset VERSION 0.1]
 [comment {-*- mode: tcl; fill-column: 80 -*- doctools manpage}]
-[manpage_begin shtmlview_doctools n [vset VERSION]]
-[see_also shtmlview doctools]
+[manpage_begin thtmlview_doctools n [vset VERSION]]
+[see_also thtmlview doctools]
 [keywords doctools html]
 [copyright {2022, Detlef Groth <detlef(at)dgroth(dot)de>}]
 
 [moddesc   {Basic HTML and Markdown viewer widget}]
-[titledesc {shtmlview extension adding support for doctools markup}]
+[titledesc {thtmlview extension adding support for doctools markup}]
 [require dtplite]
-[require shtmlview::shtmlview]
+[require thtmlview::shtmlview]
 
 [description]
 
-The [package shtmlview::doctools] package extends
-[package shtmlview::shtmlview] widgets with support for rendering of
+The [package thtmlview::doctools] package extends
+[package thtmlview::shtmlview] widgets with support for rendering of
 [term doctools]-formatted documents.
 
 [para]
@@ -95,7 +95,7 @@ subject to the restrictions as set forth in subparagraph (c) (1) (ii)
 of the Rights in Technical Data and Computer Software Clause as DFARS
 252.227-7013 and FAR 52.227-19.
 
-[vset CATEGORY shtmlview]
+[vset CATEGORY thtmlview]
 
 [manpage_end]
 

@@ -2,24 +2,24 @@
 ##
 ## (C) 2022 Dr. Detlef Groth, Germany, Andreas Kupries
 ##
-## shtmlview extension adding support for mkdoc markup
+## thtmlview extension adding support for mkdoc markup
 
 # #############################################################
 ## Requirements - Viewer widget, and easy mkdoc conversion
 
-package require shtmlview::shtmlview
+package require thtmlview::shtmlview
 package require mkdoc::mkdoc
 
 # #############################################################
 ## Register the new converter
 
-::shtmlview::converter .tcl {Tcl+mkdoc files}   ::shtmlview::mkdoc
-::shtmlview::converter .tm  {Tcl+mkdoc modules} ::shtmlview::mkdoc
+::thtmlview::converter .tcl {Tcl+mkdoc files}   ::shtmlview::mkdoc
+::thtmlview::converter .tm  {Tcl+mkdoc modules} ::shtmlview::mkdoc
 
 # #############################################################
 ## Exported API
 
-proc ::shtmlview::mkdoc {url} {
+proc ::thtmlview::mkdoc {url} {
 
     close [file tempfile htmltemp .html]
 
@@ -43,5 +43,5 @@ proc ::shtmlview::mkdoc {url} {
 # #############################################################
 ## Publish package to Tcl
 
-package provide shtmlview::mkdoc 0.1
+package provide thtmlview::mkdoc 0.1
 return

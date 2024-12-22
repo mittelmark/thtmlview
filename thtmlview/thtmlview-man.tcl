@@ -1,5 +1,5 @@
-package require shtmlview::shtmlview
-package provide shtmlview::man2html 0.1
+package require thtmlview::shtmlview
+package provide thtmlview::man2html 0.1
 catch {
     package require dtplite
 }
@@ -7,9 +7,9 @@ if {[info commands ::dtplite::do] eq ""} {
     return
 }
 
-lappend ::shtmlview::filetypes {{Tcl man files} {.man}}
+lappend ::thtmlview::filetypes {{Tcl man files} {.man}}
 
-proc ::shtmlview::man2html {url {clean true}} {
+proc ::thtmlview::man2html {url {clean true}} {
     #package require dtplite
     set tempfile [file tempfile].html
     # why not dtplite -o .... (command does not exists)
@@ -19,7 +19,7 @@ proc ::shtmlview::man2html {url {clean true}} {
     } else {
         # perform some cleanups for better display
         if {$clean} {
-            set html [shtmlview::cleanHTML [read $infh]]
+            set html [thtmlview::cleanHTML [read $infh]]
         } else {
             # for source view real HTML should be shown
             set html [read $infh]

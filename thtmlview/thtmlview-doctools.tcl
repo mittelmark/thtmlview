@@ -2,23 +2,23 @@
 ##
 ## (C) 2022 Dr. Detlef Groth, Germany
 ##
-## shtmlview extension adding support for doctools markup
+## thtmlview extension adding support for doctools markup
 
 # #############################################################
 ## Requirements - Viewer widget, and easy doctools conversion
 
-package require shtmlview::shtmlview
+package require thtmlview::shtmlview
 package require dtplite
 
 # #############################################################
 ## Register the new converter
 
-::shtmlview::converter .man {Doctools files} ::shtmlview::doctools
+::thtmlview::converter .man {Doctools files} ::shtmlview::doctools
 
 # #############################################################
 ## Exported API
 
-proc ::shtmlview::doctools {url} {
+proc ::thtmlview::doctools {url} {
 
     close [file tempfile htmltemp .html]
 
@@ -42,5 +42,5 @@ proc ::shtmlview::doctools {url} {
 # #############################################################
 ## Publish package to Tcl
 
-package provide shtmlview::doctools 0.1
+package provide thtmlview::doctools 0.1
 return

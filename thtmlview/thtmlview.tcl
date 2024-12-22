@@ -1,5 +1,5 @@
 # -*- mode: tcl ; fill-column: 80 -*-
-#* shtmlview HTML-Viewer
+#* thtmlview HTML-Viewer
 #* Cleaned up version of Robert Heller's HTMLHelp tool
 #* Detlef Groth's one just can load and display htmlpages
 #* ToDo:
@@ -21,10 +21,10 @@
 #* ------------------------------------------------------------------
 #* Modification History: Revision 1.1  2002/07/28 14:03:50  heller
 #*                       Add it copyright notice headers
-#* Modification History: 2018-10-10 shtmlview 1.0 started, based on HtmlHelp 1.0 of Robert Heller
+#* Modification History: 2018-10-10 thtmlview 1.0 started, based on HtmlHelp 1.0 of Robert Heller
 #*                      - removing toc part
 #*                      - removing toplevel approach of bwidgets
-#*                      - renamed the namespace to shtmlview::shtmlview
+#*                      - renamed the namespace to thtmlview::shtmlview
 #*                      - adding more bindings to increase/decrease the font size
 #*                      - adding simple browse function
 #*                      - fixing a parsing bug in html code by adding code of Kevin Walzer's module tkwebview
@@ -32,6 +32,7 @@
 #*                      - 2018-10-20 removed bwidget dependency
 #*                      - tablesupport option
 #*                      - 2022-03-XX bugfixes for anchor links and copy operation, support for Markdown files and inline base encoded images
+#*                      - 2024-12-22 renamed to thtmlview to distinguish it from tcllibs shtmlview
 #* ------------------------------------------------------------------
 #* Contents:
 #*
@@ -102,11 +103,11 @@ if {[info exists argv0] && [lindex $argv 0] eq [info script]} {
     lappend auto_path [file join [file dirname [info script]] .. libs]
 }
 
-package require Tcl 8.5
+package require Tcl 8.5-
 package require Tk
 package require snit
 
-package provide shtmlview::shtmlview 1.1.2
+package provide thtmlview::thtmlview 2.0.0
 
 # Optional packages supporting various features (jpeg images, tile/themes)
 # Markdown support - See bottom
@@ -123,10 +124,10 @@ if {[info command luniq] eq ""} {
     }
 }
 
-namespace eval ::shtmlview {}
+namespace eval ::thtmlview {}
 
 # API: Register a format converter
-proc ::shtmlview::converter {extension description command} {
+proc ::thtmlview::converter {extension description command} {
     variable filetypes
     variable converter
     
@@ -136,13 +137,13 @@ proc ::shtmlview::converter {extension description command} {
 }
 
 # Internal: Check presence of a converter for the extension
-proc ::shtmlview::HasConverter {ext} {
+proc ::thtmlview::HasConverter {ext} {
     variable converter
     return [info exists converter($ext)]
 }
 
 # Internal: Invoke converter for file
-proc ::shtmlview::Convert {url {clean true}} {
+proc ::thtmlview::Convert {url {clean true}} {
     variable converter
     set ext [string tolower [file extension [TrimAnchor $url]]]
     
@@ -156,18 +157,18 @@ proc ::shtmlview::Convert {url {clean true}} {
     set html [uplevel #0 $cmd]
     
     if {$clean} {
-        set html [shtmlview::cleanHTML $html]
+        set html [thtmlview::cleanHTML $html]
     }
     
     return $html
 }
 
 # Internal: Sensibly name a common internal operation.
-proc ::shtmlview::TrimAnchor {url} {
+proc ::thtmlview::TrimAnchor {url} {
     return [regsub "#.*" $url {}]
 }
 
-proc ::shtmlview::md2html {url} {
+proc ::thtmlview::md2html {url} {
     if {[info commands ::Markdown::convert] eq ""} {
         catch { package require Markdown }
         if {[info commands ::Markdown::convert] eq ""} {
@@ -187,7 +188,7 @@ proc ::shtmlview::md2html {url} {
     return [Markdown::convert $md]
 }
 
-namespace eval ::shtmlview {
+namespace eval ::thtmlview {
     variable filetypes [list]
     # Robert Heller: It uses code originally written by Stephen Uhler and
     # modified by Clif Flynt (htmllib 0.3 through 0.3.4). I have modified it
@@ -477,76 +478,76 @@ namespace eval ::shtmlview {
     
     # Tab key bindings...
     bind HelpText <Tab> {
-        set master [::shtmlview::shtmlview GetInstance %W]
+        set master [::thtmlview::thtmlview GetInstance %W]
         if {"$master" eq {}} {return}
         $master nextlink %W
         break
     }
     bind HelpText <Control-Tab> {
-        set master [::shtmlview::shtmlview GetInstance %W]
+        set master [::thtmlview::thtmlview GetInstance %W]
         if {"$master" eq {}} {return}
         $master prevlink %W
         break
     }
     bind HelpText <Return> {
-        set master [::shtmlview::shtmlview GetInstance %W]
+        set master [::thtmlview::thtmlview GetInstance %W]
         if {"$master" eq {}} {return}
         $master BrowseInsert
     }
     
     # Additional Help specific bindings
     bind HelpText <b> {
-        set master [::shtmlview::shtmlview GetInstance %W]
+        set master [::thtmlview::thtmlview GetInstance %W]
         if {"$master" eq {}} {return}
         $master back
     }
     bind HelpText <f> {
-        set master [::shtmlview::shtmlview GetInstance %W]
+        set master [::thtmlview::thtmlview GetInstance %W]
         if {"$master" eq {}} {return}
         $master forward
     }
     bind HelpText <q> {
-        set master [::shtmlview::shtmlview GetInstance %W]
+        set master [::thtmlview::thtmlview GetInstance %W]
         if {"$master" eq {}} {return}
         $master delete
     }
     bind HelpText <s> {
-        set master [::shtmlview::shtmlview GetInstance %W]
+        set master [::thtmlview::thtmlview GetInstance %W]
         if {"$master" eq {}} {return}
         $master searchforward %W
     }
     bind HelpText <Control-r> {
-        set master [::shtmlview::shtmlview GetInstance %W]
+        set master [::thtmlview::thtmlview GetInstance %W]
         if {"$master" eq {}} {return}
         $master reload
     }
     bind HelpText <Control-u> {
-        set master [::shtmlview::shtmlview GetInstance %W]
+        set master [::thtmlview::thtmlview GetInstance %W]
         if {"$master" eq {}} {return}
         $master sourceView
     }
     bind HelpText <Control-Shift-E> {
-        set master [::shtmlview::shtmlview GetInstance %W]
+        set master [::thtmlview::thtmlview GetInstance %W]
         if {"$master" eq {}} {return}
         $master editView
     }
     bind HelpText <n> {
-        set master [::shtmlview::shtmlview GetInstance %W]
+        set master [::thtmlview::thtmlview GetInstance %W]
         if {"$master" eq {}} {return}
         $master _SForward %W
     }
     bind HelpText <r> {
-        set master [::shtmlview::shtmlview GetInstance %W]
+        set master [::thtmlview::thtmlview GetInstance %W]
         if {"$master" eq {}} {return}
         $master searchbackward %W
     }
     bind HelpText <m> {
-        set master [::shtmlview::shtmlview GetInstance %W]
+        set master [::thtmlview::thtmlview GetInstance %W]
         if {"$master" eq {}} {return}
         $master _SBackward %W
     }
     
-    snit::widget shtmlview {
+    snit::widget thtmlview {
         ## a widget that provides a pur tcl/tk solution to display
         ## and browse html pages
         ## useful for help systems
@@ -781,7 +782,7 @@ namespace eval ::shtmlview {
             if {[info commands ::Markdown::convert] ne ""} {
                 set types [linsert $types end-1 {{Markdown Files} {.md} }]
             }
-            foreach ftype $::shtmlview::filetypes {
+            foreach ftype $::thtmlview::filetypes {
                 $self addFileType $ftype
             }
             
@@ -810,7 +811,7 @@ namespace eval ::shtmlview {
         }
         method getFiles {} {
             set files [lmap file [list $topicstack {*}$stack] {
-                    shtmlview::TrimAnchor $file
+                    thtmlview::TrimAnchor $file
                 }]
             set files [luniq $files]
             return $files
@@ -917,7 +918,7 @@ namespace eval ::shtmlview {
             ## Public method to display help on a specific topic.
             # @param topic The topic text to display help for.
             # we call this before rendering just to allow different
-            # instances of shtmlview
+            # instances of thtmlview
             set lasturl $url
             $self configureTableSupport -tablesupport $options(-tablesupport)
             foreach arg $args {
@@ -1116,18 +1117,18 @@ namespace eval ::shtmlview {
             set out [open $file w 0600]
             puts -nonewline $out [$edittext get 1.0 end]
             close $out
-            set editstatus "File [file tail [shtmlview::TrimAnchor $Url]] saved! Use Ctrl-Shift-e to switch back to browser!"
+            set editstatus "File [file tail [thtmlview::TrimAnchor $Url]] saved! Use Ctrl-Shift-e to switch back to browser!"
             $edittext edit modified false
             $win.ef.toolbar.save configure -state disabled
         }
         method editView {} {
             if {$view eq "browse"} {
                 pack forget $win.mf
-                set key [shtmlview::TrimAnchor $Url]
+                set key [thtmlview::TrimAnchor $Url]
                 set lastyview($key) [$helptext yview]
                 pack $win.ef -side top -fill both -expand true
                 $edittext delete 1.0 end
-                if [catch {open [shtmlview::TrimAnchor $Url] r} infh] {
+                if [catch {open [thtmlview::TrimAnchor $Url] r} infh] {
                     puts stderr "Cannot open $Url: $infh"
                 } else {
                     $edittext insert 1.0 [read $infh]
@@ -1136,13 +1137,13 @@ namespace eval ::shtmlview {
                 }
                 set view edit
                 pack forget $win.toolbar
-                set editstatus "Use Ctrl-s to save [shtmlview::TrimAnchor $Url]"
+                set editstatus "Use Ctrl-s to save [thtmlview::TrimAnchor $Url]"
                 
                 if {[info exists lasteview($key)]} {
                     $edittext yview moveto [lindex $lasteview($key) 0]
                 }
             } else {
-                set key [shtmlview::TrimAnchor $Url]
+                set key [thtmlview::TrimAnchor $Url]
                 set lasteview($key) [$edittext yview]
                 pack forget $win.ef
                 pack $win.mf -side top -fill both -expand true
@@ -1161,7 +1162,7 @@ namespace eval ::shtmlview {
                 } else {
                     set view md
                 }
-                set key [shtmlview::TrimAnchor $Url]
+                set key [thtmlview::TrimAnchor $Url]
                 set lastyview($key) [$helptext yview]
                 $helptext delete 1.0 end
                 if [catch {open $Url r} infh] {
@@ -1171,13 +1172,13 @@ namespace eval ::shtmlview {
                     close $infh
                 }
             } elseif {$view eq "html"} {
-                render $selfns $helptext [shtmlview::TrimAnchor $Url] no
-                set key [shtmlview::TrimAnchor $Url]
+                render $selfns $helptext [thtmlview::TrimAnchor $Url] no
+                set key [thtmlview::TrimAnchor $Url]
                 $helptext yview moveto [lindex $lastyview($key) 0]
                 set view browse
             } elseif {$view eq "md"} {
                 # show html
-                set html [shtmlview::Convert $Url false]
+                set html [thtmlview::Convert $Url false]
                 $helptext delete 1.0 end
                 $helptext insert 1.0 $html
                 set view html
@@ -1262,7 +1263,7 @@ namespace eval ::shtmlview {
             append keys "\n TAB - next hyperlink"
         }
         method help {} {
-            tk_messageBox -title "About!" -icon info -message "shtmlview help browser version [package present shtmlview::shtmlview]\n[$self getKeyBindings]" -type ok
+            tk_messageBox -title "About!" -icon info -message "thtmlview help browser version [package present thtmlview::thtmlview]\n[$self getKeyBindings]" -type ok
         }
         method open {} {
             set url ""
@@ -1391,18 +1392,18 @@ namespace eval ::shtmlview {
             ##
             set url [file normalize $url]
             if {$options(-home) eq ""} {
-                set options(-home) [shtmlview::TrimAnchor $url]
+                set options(-home) [thtmlview::TrimAnchor $url]
             }
             set ourl $url
-            if {![file exists [shtmlview::TrimAnchor $url]]} {
+            if {![file exists [thtmlview::TrimAnchor $url]]} {
                 set ocol [$win cget -background]
                 $win configure -background orange
                 update idletasks
                 after 500
                 $win configure -background $ocol
-                $status configure -text "Error: [file tail [shtmlview::TrimAnchor $url]] does not exist!"
+                $status configure -text "Error: [file tail [thtmlview::TrimAnchor $url]] does not exist!"
                 if {[llength $topicstack] == 0} {
-                    $win insert end "\nError: File [shtmlview::TrimAnchor $url] does not exist!\n"
+                    $win insert end "\nError: File [thtmlview::TrimAnchor $url] does not exist!\n"
                     $win tag add hilite 1.0 end
                 }
                 return
@@ -1411,7 +1412,7 @@ namespace eval ::shtmlview {
             set fragment ""
             if {$push && $win eq $helptext} {pushcurrenttopic $selfns $url}
             regexp {([^#]*)#(.+)} $url dummy url fragment
-            if {$url eq [shtmlview::TrimAnchor $lasturl] && ($fragment ne "")} {
+            if {$url eq [thtmlview::TrimAnchor $lasturl] && ($fragment ne "")} {
                 set url $lasturl
                 HMgoto $selfns $win $fragment
                 set lasturl $url#$fragment
@@ -1436,10 +1437,10 @@ namespace eval ::shtmlview {
             set ext [string tolower [file extension [TrimAnchor $url]]]
             if {$ext in {.html .htm}} {
                 set html [get_html $url]
-            } elseif {[shtmlview::HasConverter $ext]} {
-                set html [shtmlview::Convert $url]
+            } elseif {[thtmlview::HasConverter $ext]} {
+                set html [thtmlview::Convert $url]
             } else {
-                set filename [shtmlview::TrimAnchor $url]
+                set filename [thtmlview::TrimAnchor $url]
                 if [catch {open $filename r} infh] {
                     puts stderr "Cannot open $filename: $infh"
                 } else {
@@ -3436,7 +3437,7 @@ namespace eval ::svgconvert {
 }
 catch {
     package require Markdown
-    ::shtmlview::converter .md {} ::shtmlview::md2html
+    ::thtmlview::converter .md {} ::thtmlview::md2html
 }
 
 if {[info exists argv0] && [info script] eq $argv0} {
@@ -3444,18 +3445,18 @@ if {[info exists argv0] && [info script] eq $argv0} {
     # Support various non-HTML formats, if possible
     set sdir [file dirname [info script]]
     catch { 
-        if {[file exists [file join $sdir shtmlview-doctools.tcl]]} {
+        if {[file exists [file join $sdir thtmlview-doctools.tcl]]} {
             
-            source [file join $sdir shtmlview-doctools.tcl]
+            source [file join $sdir thtmlview-doctools.tcl]
         } else {
-            package require shtmlview::doctools 
+            package require thtmlview::doctools 
         }
     }
     catch { 
-        if {[file exists [file join $sdir shtmlview-mkdoc.tcl]]} {
-            source [file join $sdir shtmlview-mkdoc.tcl]
+        if {[file exists [file join $sdir thtmlview-mkdoc.tcl]]} {
+            source [file join $sdir thtmlview-mkdoc.tcl]
         } else {
-            package require shtmlview::mkdoc  
+            package require thtmlview::mkdoc  
         }
         
     }
@@ -3475,7 +3476,7 @@ if {[info exists argv0] && [info script] eq $argv0} {
         if {[info command ::svgconvert::svgconv] eq ""} {
             set svg "false - install rsvg-convert or cairo or Tcl package critcl and librsvg2-dev"
         }
-        puts stderr "shtmlview: Markdown and HTML file viewer\n"
+        puts stderr "thtmlview: Markdown and HTML file viewer\n"
         puts stderr "Usage as application: $::argv0 \[OPTION\] \[FILENAME\]\n"
         puts stderr "  FILENAME: HTML file or Markdown file"
         puts stderr "  OPTION:"
@@ -3487,8 +3488,8 @@ if {[info exists argv0] && [info script] eq $argv0} {
         puts stderr "    --test      - run a test with two widgets in one toplevel"
         puts stderr "    --docu      - display the package documentation"
         puts stderr "\nUsage as Tcl package:"
-        puts stderr "\n  package require shtmlview"
-        puts stderr "  shtmlview::shtmlview .help"
+        puts stderr "\n  package require thtmlview"
+        puts stderr "  thtmlview::thtmlview .help"
         puts stderr "  .help browse filename"
         puts stderr "  pack .help -fill both -expand true\n"
         puts stderr "File support:"
@@ -3504,11 +3505,11 @@ if {[info exists argv0] && [info script] eq $argv0} {
         if {[llength $argv] >= 1 && [lsearch -regexp $argv --help] > -1} {
             usage
         } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--version"} {
-            #package require shtmlview::shtmlview
-            puts [package present shtmlview::shtmlview]
+            #package require thtmlview::thtmlview
+            puts [package present thtmlview::thtmlview]
             destroy .
         } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--install"} {
-            set outname shtmlview-[package present shtmlview::shtmlview]
+            set outname thtmlview-[package present thtmlview::thtmlview]
             set tmfile ${outname}.tm
             set tm [open $tmfile w]
             set in [open [info script] r]
@@ -3520,11 +3521,11 @@ if {[info exists argv0] && [info script] eq $argv0} {
             puts "tcl::tm::path add /home/username/path/to/tmfiles\n"
             destroy .
         } elseif {[lindex $argv 0] eq "--test"} {
-            set help [::shtmlview::shtmlview .help -browsecmd found \
-                    -tablesupport true -home [file join [file dirname [info script]] shtmlview.html]]
-            ::shtmlview::shtmlview .help2
-            $help browse [file join [file dirname [info script]] shtmlview.html]
-            .help2 browse [file join [file dirname [info script]] shtmlview-test.html]
+            set help [::thtmlview::thtmlview .help -browsecmd found \
+                    -tablesupport true -home [file join [file dirname [info script]] thtmlview.html]]
+            ::thtmlview::thtmlview .help2
+            $help browse [file join [file dirname [info script]] thtmlview.html]
+            .help2 browse [file join [file dirname [info script]] thtmlview-test.html]
             pack $help -fill both -expand true -side top
             pack .help2 -fill both -expand true -side top
             #$help helptext configure -background yellow
@@ -3534,9 +3535,9 @@ if {[info exists argv0] && [info script] eq $argv0} {
             $help dosearch the forward
             after 1000
             puts [$help helptext yview moveto 0.1]
-            $help browse [file join [file dirname [info script]] shtmlview.html]
+            $help browse [file join [file dirname [info script]] thtmlview.html]
         } elseif {[lindex $argv 0] eq "--render"} {
-            set help [::shtmlview::shtmlview .help \
+            set help [::thtmlview::thtmlview .help \
                     -tablesupport false -toolbar false]
             if {[llength $argv] == 2 && [lindex $argv 1] ne "-"} {
                 $help render [regsub -all {\\n} [lindex $argv 1] "\n"]
@@ -3547,16 +3548,16 @@ if {[info exists argv0] && [info script] eq $argv0} {
             }
             pack $help -fill both -expand true -side top
         } elseif {[lindex $argv 0] eq "--docu"} {
-            set docu [file join [file dirname [info script]] shtmlview.html]
-            set help [::shtmlview::shtmlview .help \
+            set docu [file join [file dirname [info script]] thtmlview.html]
+            set help [::thtmlview::thtmlview .help \
                     -tablesupport true -home $docu]
             $help browse [$help cget -home]
             pack $help -fill both -expand true -side top
         } elseif {[file exists [lindex $argv 0]]} {
             set file [lindex $argv 0]
             
-            set help [::shtmlview::shtmlview .help -historycombo true \
-                    -tablesupport true -home [file join [file dirname [info script]] shtmlview.html]]
+            set help [::thtmlview::thtmlview .help -historycombo true \
+                    -tablesupport true -home [file join [file dirname [info script]] thtmlview.html]]
             pack $help -side top -fill both -expand true
             
             # Standard formats (HTML + whatever plugins got found)
